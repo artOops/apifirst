@@ -1,0 +1,72 @@
+plugins {
+    id 'java'
+    id "org.springframework.boot" version "3.3.4"
+    id "org.openapi.generator" version "7.1.0"
+}
+
+group = "ru.apifirst"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "$buildDir/generated"
+        }
+    }
+}
+
+//Валидация схемы
+openApiValidate {
+    inputSpec.set("$rootDir/src/main/resources/ApiFirst.yaml")
+    recommend.set(true)
+}
+
+//Генерация данных на основании схемы
+openApiGenerate {
+    generatorName.set("spring")
+    inputSpec.set("$rootDir/src/main/resources/ApiFirst.yaml")
+    outputDir.set("$buildDir/generated")
+    apiPackage.set("ru.artem.api")
+    invokerPackage.set("ru.artem.invoker")
+    modelPackage.set("ru.artem.model")
+    configOptions = [
+            dateLibrary                  : "java8",
+            interfaceOnly                : "true",
+            skipDefaultInterafece        : "true",
+            useTags                      : "true",
+            additionalModelTypeAnnotation: "@lombok.Builder lombok.@NoArgsConstructor lombok.@RequiredArgsConstructor"
+    ]
+}
+
+dependencies {
+    //spring starter
+    implementation 'org.springframework.boot:spring-boot-starter:3.3.4'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.3.4'
+
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    testCompileOnly 'org.projectlombok:lombok:1.18.34'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+    //jackson
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.1'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+
+
+    //spring doc api
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.14'
+    implementation 'org.openapitools:openapi-generator-gradle-plugin:7.8.0'
+}
