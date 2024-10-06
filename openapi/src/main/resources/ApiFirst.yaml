@@ -1,0 +1,98 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "description": "Description",
+    "title": "Title",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "description": "Generated server url",
+      "url": "http://localhost:8080"
+    }
+  ],
+  "tags": [
+    {
+      "description": "API для работы с категориями",
+      "name": "Admin: Категории"
+    }
+  ],
+  "paths": {
+    "/admin/categories": {
+      "post": {
+        "description": "Обратите внимание: имя категории должно быть уникальным",
+        "operationId": "addCategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewCategoryDto"
+              }
+            }
+          },
+          "description": "данные добавляемой категории",
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            },
+            "description": "Категория добавлена"
+          }
+        },
+        "summary": "Добавление новой категории",
+        "tags": [
+          "Admin: Категории"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CategoryDto": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Идентификатор категории",
+            "format": "int64",
+            "readOnly": true,
+            "example": 1
+          },
+          "name": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string",
+            "description": "Название категории",
+            "example": "Концерты"
+          }
+        },
+        "description": "Категория"
+      },
+      "NewCategoryDto": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string",
+            "description": "Название категории",
+            "example": "Концерты"
+          }
+        },
+        "description": "Данные для добавления новой категории"
+      }
+    }
+  }
+}
